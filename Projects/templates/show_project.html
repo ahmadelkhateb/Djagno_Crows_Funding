@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project</title>
+</head>
+<body>
+    <h1>{{ project.title }} ("{{ project.category.name }}")</h1>
+    <p>{{ project.details }}</p>
+    <h2>Total target : {{ project.total_target }}</h2>
+    <h2>From {{ project.start_date }} To : {{ project.end_date }}</h2>
+    {% for pic in pics %}
+        <img src="{% static pic.image.url|slice:"16:" %}" width="300" height="300"/><br>
+    {% endfor %}
+
+    <h2>Total Rate : {{ rate }}</h2>
+    <form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+     <input type="submit" value="Add Comment">
+</body>
+</html>

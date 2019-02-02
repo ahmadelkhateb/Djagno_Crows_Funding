@@ -7,11 +7,16 @@
 <body>
 
     <h1>Hello: {{ user_inst }}</h1>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table>
     {{ form.as_table }}
     </table>
+    <table>
+    {{ formset.as_table }}
+    </table>
+        <textarea name="tag" cols="30" rows="5" placeholder="Enter Your tags in the following pattern:
+           tag1,tag2,tag3"></textarea><br>
     <input type="submit" value="Submit">
   </form>
 </body>
