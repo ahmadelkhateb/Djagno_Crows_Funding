@@ -1,7 +1,6 @@
 from django.db import models
-from Users.models import User
+from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
-
 
 
 class Category(models.Model):
@@ -25,10 +24,17 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+    def total_donations_check(self):
+        total = 0
+        for donate in self.donation_set.all():
+            total += donate.amount
+        return total < (self.total_target / 4)
+
 
 class Picture(models.Model):
-    image = models.ImageField(upload_to="Projects/static/Projects/images", null=True)
+    image = models.ImageField(upload_to="Projects/images", null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
 
 class Tag(models.Model):
     tag = models.CharField(max_length=50)
@@ -36,13 +42,18 @@ class Tag(models.Model):
     def __str__(self):
         return self.tag
 
+    def tag_exists(self,name):
+        return self.objects.get(tag=name)
+
 class Donation(models.Model):
     amount = models.PositiveIntegerField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    create_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.project.title, self.amount
+        return str(self.project) + str(self.amount)
+
 
 class Comment(models.Model):
     comment = models.TextField()
@@ -53,7 +64,8 @@ class Comment(models.Model):
     def __str__(self):
         return self.comment
 
-class Report_comment(models.Model):
+
+class ReportComment(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     reason = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -63,7 +75,7 @@ class Report_comment(models.Model):
         return self.reason
 
 
-class Report_project(models.Model):
+class ReportProject(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     reason = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -74,7 +86,8 @@ class Report_project(models.Model):
 
 
 class Rate(models.Model):
-    rate = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(1)])
+    rate = models.IntegerField(validators=[MaxValueValidator(5, message="Max Rate Value is 5",),
+                                           MinValueValidator(1, message="Min Rate value is 1")],)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
@@ -83,6 +96,4 @@ class Rate(models.Model):
 
     def __str__(self):
         return str(self.project) + "By : " + str(self.user) + " : " + str(self.rate)
-
-
 

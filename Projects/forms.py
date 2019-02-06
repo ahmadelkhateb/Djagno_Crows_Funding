@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from Projects.models import Project, Tag, Comment
+from Projects.models import Project, Tag, Comment, Rate, ReportComment, ReportProject, Donation
 
 
 class ProjectModelForm(ModelForm):
@@ -20,3 +20,25 @@ class CommentModelForm(ModelForm):
         fields = ['comment', ]
 
 
+class RateModelForm(ModelForm):
+    class Meta:
+        model = Rate
+        fields = ['rate', ]
+
+
+class ReportProjectForm(ModelForm):
+    class Meta:
+        model = ReportProject
+        fields = ['reason', ]
+
+
+class ReportCommentForm(ModelForm):
+    class Meta:
+        model = ReportComment
+        fields = ['reason', ]
+
+
+class DonationForm(ModelForm):
+    class Meta:
+        model = Donation
+        fields = ['amount', ]
