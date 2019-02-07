@@ -5,21 +5,46 @@
         <div class="content-section">
             <div class="alert alert-primary text-center" style="font-size:20px" role="alert">
               {{ project.title }} ("{{ project.category.name }}")
-        </div>
+            </div>
         <div class="alert alert-success" role="alert">
           <h4 class="alert-heading">Description</h4>
           <p>{{ project.details }}</p>
           <hr>
-          <h4 class="alert-heading">Comments</h4>
-             {% for comment in comments %}
-                <p class="mb-0">{{ comment }}</p>
-                 <a href="{% url 'report_comment' comment.id %}" target="_blank">Report</a>
-                <hr>
-             {% endfor %}
+            {% if comments %}
+              <h4 class="alert-heading">Comments</h4>
+                 {% for comment in comments %}
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img src="{{ comment.user.profile.image.url }}" class="img img-rounded img-fluid"/>
+                                <p class="text-secondary text-center">{{ comment.create_date|timesince }} ago</p>
+                            </div>
+                            <div class="col-md-10">
+                                <p>
+                                        <strong>{{ comment.user.first_name|capfirst }}
+                                                {{ comment.user.last_name|capfirst }}</strong><hr>
+                               </p>
+                               <div class="clearfix"></div>
+                                <p>{{ comment }}.</p>
+                                <a class="float-right btn text-white btn-danger"
+                                    href="{% url 'report_comment' comment.id %}" target="_blank">Report</a>
+                            </div>
+                        </div>
+                    </div>
+                 {% endfor %}
+            {% endif %}
+            <hr>
           <h4 class="alert-heading">Info</h4>
             <p class="mb-0"><pre>Total target  :  {{ project.total_target }}</pre></p>
             <p class="mb-0"><pre>From : {{ project.start_date }}    To : {{ project.end_date }}</pre></p>
             <p class="mb-0"><pre>Total Rate   :   {{ rate }}</pre></p>
+            <hr>
+            <p class="mb-0"><pre>Donations Achieved :</pre></p>
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
+                   style="width: {{ project.donation_percent }}%" aria-valuenow="{{ project.donation_percent }}"
+                   aria-valuemin="0" aria-valuemax="100">{{ project.donation_percent }}%</div>
+            </div>
         </div>
 
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -59,6 +84,7 @@
                 </div>
             </form>
 
+            {% if project.user != user %}
             <form method="POST">
                 {% csrf_token %}
                 <fieldset class="form-group">
@@ -78,13 +104,34 @@
                     <button class="btn btn-outline-info" type="submit">Donate</button>
                 </div>
             </form>
-
             <button class="btn btn-warning btn-block"><a href="{% url 'report' project.id %}" target="_blank">
                 Report This Project</a></button>
-            <h2>{{ project.total_donations }}</h2>
+            {% endif %}
             {% if project.user == user and project.total_donations_check %}
                 <button class="btn btn-outline-info">Cancel Project</button>
             {% endif %}
         </div>
+        <div class="alert alert-primary text-center" style="font-size:20px" role="alert">
+                   Similar Projects
+                    <hr>
+                <div class="card-columns">
+                    {% for semi_project in similar %}
+                    {% if semi_project != project %}
+                        <div class="card" style="width:100%">
+                        {% for image in semi_project.first_image %}
+                        <img class="card-img-top" src="{{ image.image.url }}" alt="Card image cap">
+                        {% endfor %}
+                        <div class="card-body">
+                          <h5 class="card-title">{{ semi_project.title }}</h5>
+                          <p class="card-text">{{ semi_project.details }}</p>
+                        </div>
+                        <div class="card-footer">
+                          <small class="text-muted"><a href="{% url 'show_project' semi_project.id %}">See More</a></small>
+                        </div>
+                      </div>
+                    {% endif %}
 
+                {% endfor %}
+            </div>
+        </div>
     {% endblock content %}

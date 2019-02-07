@@ -1,0 +1,24 @@
+{% extends "users/base.html" %}
+{% block content %}
+    <div class="alert alert-primary text-center" style="font-size:20px" role="alert">
+              {{ category.name }} Category Projects
+                <hr>
+            <div class="card-columns">
+            {% for project in projects %}
+                <div class="card">
+                    {% for image in project.first_image %}
+                    <img class="card-img-top" src="{{ image.image.url }}" alt="Card image cap">
+                    {% endfor %}
+                    <div class="card-body">
+                      <h5 class="card-title">{{ project.title }}</h5>
+                      <p class="card-text">{{ project.details }}</p>
+                    </div>
+                    <div class="card-footer">
+                      <small class="text-muted"><a href="{% url 'show_project' project.id %}">See More</a></small>
+                    </div>
+                  </div>
+            {% endfor %}
+    </div>
+    </div>
+
+{% endblock content %}

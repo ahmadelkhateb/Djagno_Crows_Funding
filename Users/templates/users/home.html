@@ -1,4 +1,32 @@
 {% extends "users/base.html" %}
 {% block content %}
+    <div class="alert alert-primary text-center" style="font-size:20px" role="alert">
+              Highest Rated Projects
+                <hr>
+            <div class="card-columns">
+            {% for high in high_rate %}
+                <div class="card">
+                    {% for image in high.project.first_image %}
+                    <img class="card-img-top" src="{{ image.image.url }}" alt="Card image cap">
+                    {% endfor %}
+                    <div class="card-body">
+                      <h5 class="card-title">{{ high.project.title }}</h5>
+                      <p class="card-text">{{ high.project.details }}</p>
+                    </div>
+                    <div class="card-footer">
+                      <small class="text-muted"><a href="{% url 'show_project' high.project.id %}">See More</a></small>
+                    </div>
+                  </div>
+            {% endfor %}
+    </div>
+    </div>
 
+    <div class="alert alert-primary text-center" style="font-size:20px" role="alert">
+        Categories
+        <hr>
+        {% for cat in cats %}
+            <a href="{% url 'category' cat.id %}"><button type="button" class="btn btn-primary btn-lg">{{ cat.name }}
+            </button></a>
+        {% endfor %}
+    </div>
 {% endblock content %}

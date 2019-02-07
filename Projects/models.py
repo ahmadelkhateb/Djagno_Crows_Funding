@@ -30,6 +30,23 @@ class Project(models.Model):
             total += donate.amount
         return total < (self.total_target / 4)
 
+    def donation_percent(self):
+        total = 0
+        for donate in self.donation_set.all():
+            total += donate.amount
+        return int((total / self.total_target) * 100)
+
+    def first_image(self):
+        return self.picture_set.all()[:1]
+
+    def similar_projects(self):
+        project_tags = self.tags.all()
+        similar = Project.objects.none()
+        for tag in project_tags:
+            project_list = tag.project_set.all()
+            similar = (similar | project_list)
+        return similar.distinct()[:6]
+
 
 class Picture(models.Model):
     image = models.ImageField(upload_to="Projects/images", null=True)
@@ -44,6 +61,7 @@ class Tag(models.Model):
 
     def tag_exists(self,name):
         return self.objects.get(tag=name)
+
 
 class Donation(models.Model):
     amount = models.PositiveIntegerField()

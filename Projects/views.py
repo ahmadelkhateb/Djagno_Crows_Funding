@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib import messages
-from Projects.models import Project, Picture, Tag, Comment
+from Projects.models import Project, Picture, Tag, Comment, Category
 from Projects.forms import ProjectModelForm, CommentModelForm, RateModelForm, ReportProjectForm, ReportCommentForm, DonationForm
 from django.forms import modelformset_factory
 from django.db.models import Avg
@@ -41,12 +41,11 @@ def first_form(request):
                     tag = Tag.objects.get(tag=tag)
                     project.tags.add(tag)
 
-
             for pic in formset:
                 try:
-                    picture = Picture(image = pic.cleaned_data['image'], project = project)
+                    picture = Picture(image=pic.cleaned_data['image'], project=project)
                     picture.save()
-                except Exception as e:
+                except:
                     break
             # redirect to a new URL:
             return HttpResponseRedirect(reverse('Home'))
@@ -70,7 +69,7 @@ def show_project(request, pro_id):
     pics = project.picture_set.all
     rate = project.rate_set.all().aggregate(Avg('rate'))
     comments = project.comment_set.all()
-    #similars = project.objects.filter
+    similar_projects = project.similar_projects()
     if request.method == 'POST':
         comment_form = CommentModelForm(request.POST)
         rate_form = RateModelForm(request.POST)
@@ -103,7 +102,8 @@ def show_project(request, pro_id):
         rate_form = RateModelForm()
         donation_form = DonationForm()
     context = {'project': project, 'pics': pics, 'rate': rate['rate__avg'],
-               'form': comment_form, 'comments': comments, 'rate_form': rate_form, 'donate': donation_form}
+               'form': comment_form, 'comments': comments, 'rate_form': rate_form,
+               'donate': donation_form, 'similar': similar_projects}
     return  render(request, 'show_project.html', context)
 
 
@@ -141,4 +141,12 @@ def add_report_comment(request, com_id):
         report_form = ReportCommentForm()
         context = {'form': report_form, 'comment': comment}
         return render(request, 'report.html', context)
+
+
+@login_required
+def categories(request, cat_id):
+    category = get_object_or_404(Category, pk=cat_id)
+    projects = category.project_set.all()
+    context = {'projects': projects, 'category': category}
+    return render(request, 'categories.html', context)
 

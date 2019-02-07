@@ -5,7 +5,11 @@
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Report on {{ project.title }} {{ comment.comment }}</legend>
+                {% if project.title %}
+                <legend class="border-bottom mb-4">Report on Project "{{ project.title }}"</legend>
+                {% elif comment.comment %}
+                <legend class="border-bottom mb-4">Report on Comment "{{ comment.comment }}"</legend>
+                {% endif %}
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
