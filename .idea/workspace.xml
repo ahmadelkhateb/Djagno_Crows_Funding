@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b06d07de-6395-4bec-8564-6823c8e38e9f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Crowd_Funding/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Crowd_Funding/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Crowd_Funding/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Crowd_Funding/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Users/templates/users/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/Users/templates/users/login.html" afterDir="false" />
-    </list>
+    <list default="true" id="b06d07de-6395-4bec-8564-6823c8e38e9f" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
