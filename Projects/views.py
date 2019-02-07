@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.db.models import Q
 from django.contrib import messages
-from Projects.models import Project, Picture, Tag, Comment, Category
+from Projects.models import Project, Picture, Tag, Comment, Category, Rate
 from Projects.forms import ProjectModelForm, CommentModelForm, RateModelForm, ReportProjectForm, ReportCommentForm, DonationForm
 from django.forms import modelformset_factory
 from django.db.models import Avg
@@ -70,6 +71,14 @@ def show_project(request, pro_id):
     rate = project.rate_set.all().aggregate(Avg('rate'))
     comments = project.comment_set.all()
     similar_projects = project.similar_projects()
+    check_user_rate = Rate.objects.none()
+    try :
+        check_rateduser = project.rate_set.all().get(Q(project=project),Q(user=request.user))
+    except ObjectDoesNotExist:
+        pass
+    else:
+        check_user_rate = check_rateduser
+
     if request.method == 'POST':
         comment_form = CommentModelForm(request.POST)
         rate_form = RateModelForm(request.POST)
@@ -103,7 +112,7 @@ def show_project(request, pro_id):
         donation_form = DonationForm()
     context = {'project': project, 'pics': pics, 'rate': rate['rate__avg'],
                'form': comment_form, 'comments': comments, 'rate_form': rate_form,
-               'donate': donation_form, 'similar': similar_projects}
+               'donate': donation_form, 'similar': similar_projects, 'rate_check': check_user_rate}
     return  render(request, 'show_project.html', context)
 
 

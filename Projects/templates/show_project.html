@@ -4,13 +4,13 @@
     {% block content %}
         <div class="content-section">
             <div class="alert alert-primary text-center" style="font-size:20px" role="alert">
-              {{ project.title }} ("{{ project.category.name }}")
+              {{ project.title }}
             </div>
         <div class="alert alert-success" role="alert">
           <h4 class="alert-heading">Description</h4>
           <p>{{ project.details }}</p>
-          <hr>
             {% if comments %}
+            <hr>
               <h4 class="alert-heading">Comments</h4>
                  {% for comment in comments %}
                     <div class="card-body">
@@ -35,6 +35,10 @@
             {% endif %}
             <hr>
           <h4 class="alert-heading">Info</h4>
+            <p class="mb-0"><pre>Category  :  {{ project.category.name }}</pre></p>
+            <p class="mb-0">
+                <pre>Owner  :  {{ project.user.first_name|capfirst }} {{ project.user.last_name|capfirst }}</pre>
+            </p>
             <p class="mb-0"><pre>Total target  :  {{ project.total_target }}</pre></p>
             <p class="mb-0"><pre>From : {{ project.start_date }}    To : {{ project.end_date }}</pre></p>
             <p class="mb-0"><pre>Total Rate   :   {{ rate }}</pre></p>
@@ -85,6 +89,7 @@
             </form>
 
             {% if project.user != user %}
+             {% if not rate_check %}
             <form method="POST">
                 {% csrf_token %}
                 <fieldset class="form-group">
@@ -94,7 +99,11 @@
                     <button class="btn btn-outline-info" type="submit">Rate</button>
                 </div>
             </form>
-
+            {% else%}
+                <div class="alert alert-primary text-center" style="font-size:20px" role="alert">
+                  You Have Rated This project
+                </div>
+            {% endif %}
             <form method="POST">
                 {% csrf_token %}
                 <fieldset class="form-group">
