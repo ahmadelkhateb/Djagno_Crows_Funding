@@ -1,0 +1,38 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<style>
+    .btn{
+    padding: 10px;
+    font-size: 15px;
+    color: white;
+    background: #5F9EA0;
+    border: none;
+    border-radius: 5px;
+
+}
+</style>
+<script>
+
+</script>
+
+    <div class="content-section">
+
+            <h3>my information</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                {{ profile|crispy }}
+                <button type="submit" name="reg_user" class="btn">Update</button>
+
+
+            </form>
+        <br>
+            <a class="btn" href="{% url 'Users:delete' %}" onclick="return confirm('Are you want to delete')">Delete Account</a>
+</div>
+
+        </div>
+      </div>
+    </div>
+{% endblock content %}

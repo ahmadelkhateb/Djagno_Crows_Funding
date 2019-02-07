@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, ProfileRegisterForm
+from .forms import UserRegisterForm, ProfileRegisterForm, UserRegisterFormUpdate, ProfileUpdate
 from django.contrib.auth import login, authenticate
-from Projects.models import Project, Category, Rate, Tag
+from Projects.models import Project, Category, Rate, Tag, Picture, FeatureProject
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -39,11 +39,15 @@ def profile(request):
 
 def home(request):
     high_rate_pro = Rate.objects.all().order_by('-rate')[:6]
-    latest_pro = Project.objects.all().order_by('-pub_date')[:5]
+    images = Picture.objects.none()
+    for rate in high_rate_pro:
+        images = [x for x in images] + [y for y in rate.project.first_image()]
+    latest_pro = FeatureProject.objects.all().order_by('-updated')[:5]
     categories = Category.objects.all()
 
-    context = {'high_rate': high_rate_pro, 'latest_pro': latest_pro, 'cats': categories}
+    context = {'high_rate': high_rate_pro, 'latest_pro': latest_pro, 'cats': categories, 'images': images}
     return render(request, 'users/home.html', context)
+
 
 @login_required
 def search(request):
@@ -67,3 +71,29 @@ def search(request):
         return render(request, 'users/search.html', context)
     else:
         return redirect('Users:home')
+
+
+@login_required
+def edit(request):
+    if request.method == 'POST':
+        form = UserRegisterFormUpdate(request.POST, instance=request.user)
+        profile_form1 = ProfileUpdate(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid() and profile_form1.is_valid():
+            form.save()
+            profile_form1.save()
+            messages.success(request, 'Your account has been updated! ')
+            return redirect('profile')
+
+    else:
+        form = UserRegisterFormUpdate(instance=request.user)
+        profile_form1 = ProfileUpdate(instance=request.user.profile)
+
+    return render(request, 'users/edit.html', {'form': form, 'profile': profile_form1})
+
+
+@login_required
+def delete(request):
+    user = request.user
+    user.delete()
+    return redirect('logout')
+

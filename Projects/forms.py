@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, TextInput
 from Projects.models import Project, Tag, Comment, Rate, ReportComment, ReportProject, Donation
 
 
@@ -6,6 +6,10 @@ class ProjectModelForm(ModelForm):
     class Meta:
         model = Project
         fields = ['title', 'details', 'category', 'total_target', 'start_date', 'end_date', ]
+        widgets = {
+            'start_date': TextInput(attrs={'type': 'date'}),
+            'end_date': TextInput(attrs={'type': 'date'}),
+        }
 
 
 class TagModelForm(ModelForm):

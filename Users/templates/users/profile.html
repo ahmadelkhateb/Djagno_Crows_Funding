@@ -5,10 +5,77 @@
       <div class="media">
         <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
         <div class="media-body">
-          <h2 class="account-heading">{{ user.username }}</h2>
+            <div class="alert alert-primary text-center" style="font-size:20px" role="alert">
+              {{ user.first_name }} {{ user.last_name }}
+            </div>
           <p class="text-secondary">{{ user.email }}</p>
+            <p class="text-secondary">Username : {{ user.username }}</p>
+             <p class="text-secondary">{{ user.profile.phone }}</p>
+
+
+            <div class="alert alert-primary text-center" style="font-size:20px" role="alert">
+              My Projects
+            </div>
+            <hr>
+            <table class="table table-dark">
+                <tr>
+                <th>title</th>
+                <th>category</th>
+                <th>total_target</th>
+                <th>start_date</th>
+                <th>end_date</th>
+                <th>create_date</th>
+                </tr>
+
+
+
+                {% for m in user.project_set.all %}
+            <tr>
+
+                <td>{{ m.title }}</td>
+                <td>{{ m.category }}</td>
+                <td>{{ m.total_target }}</td>
+                <td>{{ m.start_date }}</td>
+                <td>{{ m.end_date }}</td>
+                <td>{{ m.create_date }}</td>
+                <td><a class="nav-item nav-link" href="{% url 'show_project' m.id %}">
+                    <button class="btn btn-success my-2 my-sm-0">See Details</button>
+                </a></td>
+
+            </tr>
+
+                  {% endfor %}
+            </table>
+            <hr>
+            <div class="alert alert-primary text-center" style="font-size:20px" role="alert">
+              My Donations
+            </div>
+            <table class="table table-dark">
+                  <tr>
+                <th>amount</th>
+                <th>project</th>
+                <th>user</th>
+                <th>create_date</th>
+
+                </tr>
+
+
+            {% for m in user.donation_set.all %}
+            <tr>
+                <td>{{ m.amount}}</td>
+                <td>{{ m.project}}</td>
+                <td>{{ m.user}}</td>
+                <td>{{ m.create_date}}</td>
+
+
+
+            </tr>
+            {% endfor %}
+            </table>
+            <a href="{% url 'Users:edit' %}">update your information</a>
+
+
         </div>
       </div>
-      <!-- FORM HERE -->
     </div>
 {% endblock content %}

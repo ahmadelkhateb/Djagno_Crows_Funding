@@ -11,10 +11,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
 
-def index(request):
-    return HttpResponse("You Did It Sasuke")
-
-
 @login_required
 def first_form(request):
     PicFormset = modelformset_factory(Picture, fields=('image',), extra=4)
@@ -49,7 +45,7 @@ def first_form(request):
                 except:
                     break
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('Home'))
+            return HttpResponseRedirect(reverse('Users:profile'))
 
         # If this is a GET (or any other method) create the default form.
     else:

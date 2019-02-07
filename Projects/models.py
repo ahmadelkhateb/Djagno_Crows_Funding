@@ -115,3 +115,12 @@ class Rate(models.Model):
     def __str__(self):
         return str(self.project) + "By : " + str(self.user) + " : " + str(self.rate)
 
+
+class FeatureProject(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.project)
+

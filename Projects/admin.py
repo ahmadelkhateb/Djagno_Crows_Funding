@@ -10,4 +10,5 @@ admin.site.register(ReportComment)
 admin.site.register(ReportProject)
 admin.site.register(Tag)
 admin.site.register(Picture)
+admin.site.register(FeatureProject)
 

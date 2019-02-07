@@ -38,7 +38,7 @@
                     <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
-                <a class="nav-item nav-link" href="{% url 'profile' %}">
+                <a class="nav-item nav-link" href="{% url 'Users:profile' %}">
                     <button class="btn btn-success my-2 my-sm-0">Profile</button>
                 </a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">
@@ -48,7 +48,7 @@
                 <a class="nav-item nav-link" href="{% url 'login' %}">
                     <button class="btn btn-success my-2 my-sm-0">Login</button>
                 </a>
-                <a class="nav-item nav-link" href="{% url 'register' %}">
+                <a class="nav-item nav-link" href="{% url 'Users:register' %}">
                     <button class="btn btn-success my-2 my-sm-0">Register</button>
                 </a>
               {% endif %}
