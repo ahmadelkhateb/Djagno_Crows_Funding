@@ -32,6 +32,7 @@ def register(request):
             profile_form.save()
 
             #######CONFIRMATION##########
+
             current_site = get_current_site(request)
             message = render_to_string('users/acc_active_email.html', {
                 'user': user,
@@ -43,7 +44,9 @@ def register(request):
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(mail_subject, message, to=[to_email])
             email.send()
-            return HttpResponse('Please confirm your email address to complete the registration')
+            messages.success(request, 'Your account has been created But you have to Activate your account before '
+                                      'Trying to login!')
+            return redirect('Users:home')
             # username = form.cleaned_data.get('username')
             # raw_password = form.cleaned_data.get('password1')
             # user = authenticate(username=username, password=raw_password)
@@ -71,10 +74,12 @@ def activate(request, uidb64, token):
         # registered = True
         login(request, user)
 
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        messages.success(request, 'Thank you for your email confirmation. Now you can login your account.')
+        return redirect('login')
         # return redirect('home')
     else:
-        return HttpResponse('Activation link is invalid or Expired!')
+        messages.success(request, 'Activation link is invalid or Expired!')
+        return redirect('login')
 
 
 @login_required
