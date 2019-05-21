@@ -14,7 +14,8 @@
 1- Mohammed Abdalrahman Abdalhamid
 2- Israa Elzanfaly
 3- Ahmed Elkhateeb
-4- Omnya Essam
+4- Hind Elshiwy 
+5- Omnya Essam
 
 *****Django Project Team Roles******
 
